@@ -1,4 +1,8 @@
-export default {
+const storageKey = 'mder-electron-editor-config'
+
+var localConfig = localStorage.getItem(storageKey)
+
+var config = localConfig ? JSON.parse(localConfig) :  {
     mode: 'gfm',
     lineNumbers: true,
     theme: "default",
@@ -8,3 +12,5 @@ export default {
     tabSize: 4,
     keyMap: 'default'
 }
+
+export default config

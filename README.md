@@ -11,9 +11,11 @@
 - [x] toggle menu
 - [x] paste as link/image
 - [x] export PDF/HTML
+- [x] localStorage
 - [ ] custom preview
 - [ ] open folder
 - [ ] print
+
 
 ### Develop
 

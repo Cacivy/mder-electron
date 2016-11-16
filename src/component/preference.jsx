@@ -9,6 +9,8 @@ import {ipcRenderer} from 'electron'
 
 import './preference.css'
 
+const storageKey = 'mder-electron-editor-config'
+
 class Preference extends React.Component {
     constructor(props) {
         super(props)
@@ -25,6 +27,7 @@ class Preference extends React.Component {
         })
 
         this.closeModal = this.closeModal.bind(this)
+        this.setConfig = this.setConfig.bind(this)
         this.tabSizeChange = this.tabSizeChange.bind(this)
         this.lineNumbersChange = this.lineNumbersChange.bind(this)
         this.lineWrappingChange = this.lineWrappingChange.bind(this)
@@ -38,63 +41,49 @@ class Preference extends React.Component {
         })
     }
 
+    setConfig(key, val) {
+        this.setState(prevState => {
+            prevState.config[key] = val;
+            return {
+                config: prevState.config
+            }
+        }, () => {
+            Editor.setOption(key, val)
+            localStorage.setItem(storageKey, JSON.stringify(this.state.config))
+        })
+    }
+
     tabSizeChange(e) {
         let index = e.target.selectedIndex
         let val = e.target.options[index].value
         
-        this.setState(prevState => {
-            prevState.config.tabSize = val;
-            return {
-                config: prevState.config
-            }
-        })
-        Editor.setOption('tabSize', val)
+        this.setConfig('tabSize', val)
     }
 
     lineNumbersChange(e) {
         let checked = e.target.checked
-        this.setState(prevState => {
-            prevState.config.lineNumbers = checked;
-            return {
-                config: prevState.config
-            }
-        })
-        Editor.setOption('lineNumbers', checked)
+
+        this.setConfig('lineNumbers', checked)
     }
 
     lineWrappingChange(e) {
         let checked = e.target.checked
-        this.setState(prevState => {
-            prevState.config.lineWrapping = checked;
-            return {
-                config: prevState.config
-            }
-        })
-        Editor.setOption('lineWrapping', checked)
+
+        this.setConfig('lineWrapping', checked)
     }
 
     themeChange(e) {
         let index = e.target.selectedIndex
         let val = e.target.options[index].value
-        this.setState(prevState => {
-            prevState.config.theme = val;
-            return {
-                config: prevState.config
-            }
-        })
-        Editor.setOption('theme', val)
+
+        this.setConfig('theme', val)
     }
 
     keyMapChange(e) {
         let index = e.target.selectedIndex
         let val = e.target.options[index].value
-        this.setState(prevState => {
-            prevState.config.keyMap = val;
-            return {
-                config: prevState.config
-            }
-        })
-        Editor.setOption('keyMap', val)
+
+        this.setConfig('keyMap', val)
     }
 
     render() {
