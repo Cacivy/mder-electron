@@ -2,7 +2,7 @@
   "name": "electron-react",
   "version": "1.0.0",
   "description": "a awesome markdown editor",
-  "main": "./build/main.js",
+  "main": "./app/main.js",
   "scripts": {
     "start": "electron .",
     "dev": "electron . --debug",
@@ -44,6 +44,9 @@
     "productName": "mder",
     "win": {
       "icon": "./app/static/M.ico"
+    },
+		"mac": {
+      "category": "tool"
     }
   }
 }

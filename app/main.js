@@ -58,10 +58,10 @@ function createWindow() {
     Menu.setApplicationMenu(Menu.buildFromTemplate(setMenu));
 
     // globalShortcut
-    globalShortcut.register('CommandOrControl+Shift+V', () => {
-        var obj = clipboard.readText()
-        mainWindow.webContents.send('clipboard', obj);
-    })
+    // globalShortcut.register('CommandOrControl+Shift+V', () => {
+    //     var obj = clipboard.readText()
+    //     mainWindow.webContents.send('clipboard', obj);
+    // })
 
 }
 
@@ -148,7 +148,6 @@ app.on('print-to-html', () => {
 })
 
 ipcMain.on('print-to-html', function(event, data) {
-    console.log('ok' + data)
     const htmlPath = path.join(os.tmpdir(), 'print.html')
     fs.writeFile(htmlPath, data, function (error) {
       if (error) {
