@@ -1,3 +1,5 @@
+const {app} = require('electron')
+
 module.exports = {
     label: 'Edit',
     submenu: [{
@@ -22,6 +24,18 @@ module.exports = {
         label: 'Paste',
         accelerator: 'CmdOrCtrl+V',
         role: 'paste'
+    }, {
+        label: 'Paste As Link',
+        accelerator: 'CmdOrCtrl+L',
+        click() {
+            app.emit('paste', 'link')
+        }
+    }, {
+        label: 'Paste As Image',
+        accelerator: 'CmdOrCtrl+I',
+        click() {
+            app.emit('paste', 'image')
+        }
     }, {
         label: 'Select All',
         accelerator: 'CmdOrCtrl+A',

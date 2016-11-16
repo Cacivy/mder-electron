@@ -89,7 +89,6 @@
 	            protocol: 'file:',
 	            slashes: true
 	        }));
-	        console.log(__dirname);
 	    }
 
 	    mainWindow.on('closed', function () {
@@ -140,10 +139,12 @@
 	            extensions: ['md']
 	        }]
 	    }, function (path) {
-	        fs.readFile(path[0], 'utf8', function (err, data) {
-	            setFilePath(path[0]);
-	            mainWindow.webContents.send('open-file', data);
-	        });
+	        if (path && path.length) {
+	            fs.readFile(path[0], 'utf8', function (err, data) {
+	                setFilePath(path[0]);
+	                mainWindow.webContents.send('open-file', data);
+	            });
+	        }
 	    });
 	});
 
@@ -200,6 +201,13 @@
 	        }
 	        shell.openExternal('file://' + htmlPath);
 	    });
+	});
+
+	app.on('paste', function (type) {
+	    var text = clipboard.readText();
+	    if (type) {
+	        mainWindow.webContents.send('paste-as-link', type, text);
+	    }
 	});
 
 	/*let preferenceWindow
@@ -390,9 +398,12 @@
 
 /***/ },
 /* 9 */
-/***/ function(module, exports) {
+/***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
+
+	var _require = __webpack_require__(1),
+	    app = _require.app;
 
 	module.exports = {
 	    label: 'Edit',
@@ -418,6 +429,18 @@
 	        label: 'Paste',
 	        accelerator: 'CmdOrCtrl+V',
 	        role: 'paste'
+	    }, {
+	        label: 'Paste As Link',
+	        accelerator: 'CmdOrCtrl+L',
+	        click: function click() {
+	            app.emit('paste', 'link');
+	        }
+	    }, {
+	        label: 'Paste As Image',
+	        accelerator: 'CmdOrCtrl+I',
+	        click: function click() {
+	            app.emit('paste', 'image');
+	        }
 	    }, {
 	        label: 'Select All',
 	        accelerator: 'CmdOrCtrl+A',

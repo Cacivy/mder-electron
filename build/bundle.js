@@ -40,7 +40,7 @@
 /******/ 	}
 /******/
 /******/ 	var hotApplyOnUpdate = true;
-/******/ 	var hotCurrentHash = "c6f7fabebcebc69dbd9f"; // eslint-disable-line no-unused-vars
+/******/ 	var hotCurrentHash = "3eb4fc614d8fe869908f"; // eslint-disable-line no-unused-vars
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentParents = []; // eslint-disable-line no-unused-vars
 /******/
@@ -21881,6 +21881,19 @@
 	
 	        _electron.ipcRenderer.on('wrote-html', function (event) {
 	            _electron.ipcRenderer.send('print-to-html', (0, _marked2.default)(editor.getValue()));
+	        });
+	
+	        _electron.ipcRenderer.on('paste-as-link', function (event, type, text) {
+	            var content = '';
+	            switch (type) {
+	                case 'link':
+	                    content = '[' + editor.getSelection() + '](' + text + ')';
+	                    break;
+	                case 'image':
+	                    content = '![' + editor.getSelection() + '](' + text + ')';
+	                    break;
+	            }
+	            editor.replaceSelection(content, 'around');
 	        });
 	        return _this;
 	    }

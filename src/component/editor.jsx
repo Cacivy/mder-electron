@@ -86,6 +86,19 @@ class Editor extends React.Component {
         ipcRenderer.on('wrote-html', event => {
             ipcRenderer.send('print-to-html', marked(editor.getValue()))
         })
+
+        ipcRenderer.on('paste-as-link', (event, type, text) => {
+            var content = ''
+            switch(type) {
+                case 'link':
+                    content = `[${editor.getSelection()}](${text})`
+                break;
+                case 'image':
+                    content = `![${editor.getSelection()}](${text})`
+                break;
+            }
+            editor.replaceSelection(content, 'around')
+        })
     }
 
     static setOption (key, val) {

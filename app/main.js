@@ -18,7 +18,6 @@ const debug = /--debug/.test(process.argv[2])
 require('./ipc')
 const setMenu = require('./menu')
 
-
 let mainWindow
 var filePath
 
@@ -157,6 +156,13 @@ ipcMain.on('print-to-html', function(event, data) {
       }
       shell.openExternal('file://' + htmlPath)
     })
+})
+
+app.on('paste', (type) => {
+    var text = clipboard.readText()
+    if (type) {
+        mainWindow.webContents.send('paste-as-link', type, text);
+    }
 })
 
 

@@ -2,7 +2,7 @@
   "name": "electron-react",
   "version": "1.0.0",
   "description": "a awesome markdown editor",
-  "main": "./app/main.js",
+  "main": "./build/main.js",
   "scripts": {
     "start": "electron .",
     "dev": "electron . --debug",

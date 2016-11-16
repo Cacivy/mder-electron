@@ -31,12 +31,12 @@ module.exports = {
         label: 'export',
         submenu: [{
             label: 'PDF',
-            click: () => {
+            click() {
                 app.emit('print-to-pdf')
             }
         }, {
             label: 'HTML',
-            click: () => {
+            click() {
                 app.emit('print-to-html')
             }
         }]
