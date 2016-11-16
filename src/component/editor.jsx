@@ -48,14 +48,14 @@ class Editor extends React.Component {
             let val = editor.getValue()
             if (val) {
                 ipcRenderer.send('message-dialog', 'question', '提示', '当前文本没有保存，是否保存?')
-                ipcRenderer.on('information-dialog-selection', (e, index) => {
+                ipcRenderer.once('information-dialog-selection', (e, index) => {
                     if (index) {
                         // No
                         this.setValue()
                     } else {
                         // YES
                         ipcRenderer.send('save-dialog', val)
-                        ipcRenderer.on('saved-file', (ev, filename) => {
+                        ipcRenderer.once('saved-file', (ev, filename) => {
                             ipcRenderer.send('message-dialog', 'info', '提示', '保存成功('+filename+')', [])
                             this.setValue()
                         })
@@ -73,7 +73,7 @@ class Editor extends React.Component {
             let val = editor.getValue()
             if (val) {
                 ipcRenderer.send('save-dialog', val)
-                ipcRenderer.on('saved-file', (ev, filename) => {
+                ipcRenderer.once('saved-file', (ev, filename) => {
                     ipcRenderer.send('message-dialog', 'info', '提示', '保存成功('+filename+')', [])
                 })
             }
