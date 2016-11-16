@@ -9,7 +9,6 @@ var BUILD_PATH = path.resolve(__dirname, './build');
 var config = {
     entry: {
         bundle: APP_PATH
-        // main: MAIN_PATH
     },
     output: {
         path: BUILD_PATH,
@@ -26,11 +25,11 @@ var config = {
             loader: 'style-loader!css-loader'
         }]
     },
-    target: "electron-renderer",
-    node: {
-        __dirname: false,
-        __filename: false
-    },
+    target: "electron",
+    // node: {
+    //     __dirname: false,
+    //     __filename: false
+    // },
     // target: 'node',
     // node: {
     // 	fs: "empty"

@@ -1,53 +1,30 @@
 /******/ (function(modules) { // webpackBootstrap
-/******/ 	var parentHotUpdateCallback = this["webpackHotUpdate"];
-/******/ 	this["webpackHotUpdate"] = function webpackHotUpdateCallback(chunkId, moreModules) { // eslint-disable-line no-unused-vars
-/******/ 		hotAddUpdateChunk(chunkId, moreModules);
-/******/ 		if(parentHotUpdateCallback) parentHotUpdateCallback(chunkId, moreModules);
-/******/ 	}
-/******/
 /******/ 	function hotDownloadUpdateChunk(chunkId) { // eslint-disable-line no-unused-vars
-/******/ 		var head = document.getElementsByTagName("head")[0];
-/******/ 		var script = document.createElement("script");
-/******/ 		script.type = "text/javascript";
-/******/ 		script.charset = "utf-8";
-/******/ 		script.src = __webpack_require__.p + "" + chunkId + "." + hotCurrentHash + ".hot-update.js";
-/******/ 		head.appendChild(script);
+/******/ 		var filename = require("path").join(__dirname, "" + chunkId + "." + hotCurrentHash + ".hot-update.js");
+/******/ 		require("fs").readFile(filename, "utf-8", function(err, content) {
+/******/ 			if(err) {
+/******/ 				if(__webpack_require__.onError)
+/******/ 					return __webpack_require__.onError(err);
+/******/ 				else
+/******/ 					throw err;
+/******/ 			}
+/******/ 			var chunk = {};
+/******/ 			require("vm").runInThisContext("(function(exports) {" + content + "\n})", filename)(chunk);
+/******/ 			hotAddUpdateChunk(chunk.id, chunk.modules);
+/******/ 		});
 /******/ 	}
 /******/
 /******/ 	function hotDownloadManifest(callback) { // eslint-disable-line no-unused-vars
-/******/ 		if(typeof XMLHttpRequest === "undefined")
-/******/ 			return callback(new Error("No browser support"));
-/******/ 		try {
-/******/ 			var request = new XMLHttpRequest();
-/******/ 			var requestPath = __webpack_require__.p + "" + hotCurrentHash + ".hot-update.json";
-/******/ 			request.open("GET", requestPath, true);
-/******/ 			request.timeout = 10000;
-/******/ 			request.send(null);
-/******/ 		} catch(err) {
-/******/ 			return callback(err);
-/******/ 		}
-/******/ 		request.onreadystatechange = function() {
-/******/ 			if(request.readyState !== 4) return;
-/******/ 			if(request.status === 0) {
-/******/ 				// timeout
-/******/ 				callback(new Error("Manifest request to " + requestPath + " timed out."));
-/******/ 			} else if(request.status === 404) {
-/******/ 				// no update available
-/******/ 				callback();
-/******/ 			} else if(request.status !== 200 && request.status !== 304) {
-/******/ 				// other failure
-/******/ 				callback(new Error("Manifest request to " + requestPath + " failed."));
-/******/ 			} else {
-/******/ 				// success
-/******/ 				try {
-/******/ 					var update = JSON.parse(request.responseText);
-/******/ 				} catch(e) {
-/******/ 					callback(e);
-/******/ 					return;
-/******/ 				}
-/******/ 				callback(null, update);
+/******/ 		var filename = require("path").join(__dirname, "" + hotCurrentHash + ".hot-update.json");
+/******/ 		require("fs").readFile(filename, "utf-8", function(err, content) {
+/******/ 			if(err) return callback();
+/******/ 			try {
+/******/ 				var update = JSON.parse(content);
+/******/ 			} catch(e) {
+/******/ 				return callback(e);
 /******/ 			}
-/******/ 		};
+/******/ 			callback(null, update);
+/******/ 		});
 /******/ 	}
 /******/
 /******/
@@ -63,7 +40,7 @@
 /******/ 	}
 /******/
 /******/ 	var hotApplyOnUpdate = true;
-/******/ 	var hotCurrentHash = "39aab90fc8984b9f0d45"; // eslint-disable-line no-unused-vars
+/******/ 	var hotCurrentHash = "c6f7fabebcebc69dbd9f"; // eslint-disable-line no-unused-vars
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentParents = []; // eslint-disable-line no-unused-vars
 /******/

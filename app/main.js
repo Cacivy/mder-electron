@@ -18,6 +18,7 @@ const debug = /--debug/.test(process.argv[2])
 require('./ipc')
 const setMenu = require('./menu')
 
+
 let mainWindow
 var filePath
 
@@ -94,10 +95,12 @@ app.on('open-file', () => {
             extensions: ['md']
         },]
     }, function (path) {
-        fs.readFile(path[0], 'utf8', (err, data) => {
-            setFilePath(path[0])
-            mainWindow.webContents.send('open-file', data);
-        });
+        if (path && path.length){
+            fs.readFile(path[0], 'utf8', (err, data) => {
+                setFilePath(path[0])
+                mainWindow.webContents.send('open-file', data);
+            });
+        }
     })
 })
 
