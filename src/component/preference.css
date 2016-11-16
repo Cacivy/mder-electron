@@ -1,0 +1,26 @@
+.preference-item {
+    height: 22px;
+    display: flex;
+    font-size: 14px;
+    margin-top: 15px;
+}
+
+.preference-key {
+    min-width: 150px;
+    max-width: 300px;
+    flex: 1;
+    font-weight: bold;
+}
+
+.preference-value {
+    flex: 2;
+}
+
+.close {
+    text-decoration: none;
+    background: transparent;
+    color: #333;
+    border: 0;
+    font-size: 16px;
+    margin-top: 10px;
+}

@@ -1,0 +1,29 @@
+html,
+body {
+    margin: 0;
+    width: 100%;
+    font-family: sans-serif;
+    -ms-text-size-adjust: 100%;
+    -webkit-text-size-adjust: 100%
+}
+
+.editor {
+    width: 50%;
+    height: 100%;
+    position: fixed;
+}
+
+a {
+    text-decoration: none;
+}
+
+@media print {
+  .editor {
+      display: none;
+  }
+  #preview {
+      width: 100% !important;
+      position: fixed !important;
+      left: 0 !important;
+  }
+}
