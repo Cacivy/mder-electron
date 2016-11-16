@@ -29,6 +29,9 @@ npm start
 // 单独打开web
 npm run server
 
+// 调试electron
+npm run dev
+
 // builder
 npm run dist
 ```

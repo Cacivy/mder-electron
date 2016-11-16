@@ -40,7 +40,7 @@
 /******/ 	}
 /******/
 /******/ 	var hotApplyOnUpdate = true;
-/******/ 	var hotCurrentHash = "3eb4fc614d8fe869908f"; // eslint-disable-line no-unused-vars
+/******/ 	var hotCurrentHash = "aeea7ee13035d7e061d3"; // eslint-disable-line no-unused-vars
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentParents = []; // eslint-disable-line no-unused-vars
 /******/
@@ -21844,14 +21844,14 @@
 	            var val = editor.getValue();
 	            if (val) {
 	                _electron.ipcRenderer.send('message-dialog', 'question', '提示', '当前文本没有保存，是否保存?');
-	                _electron.ipcRenderer.on('information-dialog-selection', function (e, index) {
+	                _electron.ipcRenderer.once('information-dialog-selection', function (e, index) {
 	                    if (index) {
 	                        // No
 	                        _this.setValue();
 	                    } else {
 	                        // YES
 	                        _electron.ipcRenderer.send('save-dialog', val);
-	                        _electron.ipcRenderer.on('saved-file', function (ev, filename) {
+	                        _electron.ipcRenderer.once('saved-file', function (ev, filename) {
 	                            _electron.ipcRenderer.send('message-dialog', 'info', '提示', '保存成功(' + filename + ')', []);
 	                            _this.setValue();
 	                        });
@@ -21869,7 +21869,7 @@
 	            var val = editor.getValue();
 	            if (val) {
 	                _electron.ipcRenderer.send('save-dialog', val);
-	                _electron.ipcRenderer.on('saved-file', function (ev, filename) {
+	                _electron.ipcRenderer.once('saved-file', function (ev, filename) {
 	                    _electron.ipcRenderer.send('message-dialog', 'info', '提示', '保存成功(' + filename + ')', []);
 	                });
 	            }
@@ -43326,12 +43326,16 @@
 /* 190 */
 /***/ function(module, exports) {
 
-	"use strict";
+	'use strict';
 	
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
-	exports.default = {
+	var storageKey = 'mder-electron-editor-config';
+	
+	var localConfig = localStorage.getItem(storageKey);
+	
+	var config = localConfig ? JSON.parse(localConfig) : {
 	    mode: 'gfm',
 	    lineNumbers: true,
 	    theme: "default",
@@ -43341,6 +43345,8 @@
 	    tabSize: 4,
 	    keyMap: 'default'
 	};
+	
+	exports.default = config;
 
 /***/ },
 /* 191 */
@@ -44248,6 +44254,8 @@
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
+	var storageKey = 'mder-electron-editor-config';
+	
 	var Preference = function (_React$Component) {
 	    _inherits(Preference, _React$Component);
 	
@@ -44269,6 +44277,7 @@
 	        });
 	
 	        _this.closeModal = _this.closeModal.bind(_this);
+	        _this.setConfig = _this.setConfig.bind(_this);
 	        _this.tabSizeChange = _this.tabSizeChange.bind(_this);
 	        _this.lineNumbersChange = _this.lineNumbersChange.bind(_this);
 	        _this.lineWrappingChange = _this.lineWrappingChange.bind(_this);
@@ -44285,68 +44294,57 @@
 	            });
 	        }
 	    }, {
+	        key: 'setConfig',
+	        value: function setConfig(key, val) {
+	            var _this2 = this;
+	
+	            this.setState(function (prevState) {
+	                prevState.config[key] = val;
+	                return {
+	                    config: prevState.config
+	                };
+	            }, function () {
+	                _editor2.default.setOption(key, val);
+	                localStorage.setItem(storageKey, JSON.stringify(_this2.state.config));
+	            });
+	        }
+	    }, {
 	        key: 'tabSizeChange',
 	        value: function tabSizeChange(e) {
 	            var index = e.target.selectedIndex;
 	            var val = e.target.options[index].value;
 	
-	            this.setState(function (prevState) {
-	                prevState.config.tabSize = val;
-	                return {
-	                    config: prevState.config
-	                };
-	            });
-	            _editor2.default.setOption('tabSize', val);
+	            this.setConfig('tabSize', val);
 	        }
 	    }, {
 	        key: 'lineNumbersChange',
 	        value: function lineNumbersChange(e) {
 	            var checked = e.target.checked;
-	            this.setState(function (prevState) {
-	                prevState.config.lineNumbers = checked;
-	                return {
-	                    config: prevState.config
-	                };
-	            });
-	            _editor2.default.setOption('lineNumbers', checked);
+	
+	            this.setConfig('lineNumbers', checked);
 	        }
 	    }, {
 	        key: 'lineWrappingChange',
 	        value: function lineWrappingChange(e) {
 	            var checked = e.target.checked;
-	            this.setState(function (prevState) {
-	                prevState.config.lineWrapping = checked;
-	                return {
-	                    config: prevState.config
-	                };
-	            });
-	            _editor2.default.setOption('lineWrapping', checked);
+	
+	            this.setConfig('lineWrapping', checked);
 	        }
 	    }, {
 	        key: 'themeChange',
 	        value: function themeChange(e) {
 	            var index = e.target.selectedIndex;
 	            var val = e.target.options[index].value;
-	            this.setState(function (prevState) {
-	                prevState.config.theme = val;
-	                return {
-	                    config: prevState.config
-	                };
-	            });
-	            _editor2.default.setOption('theme', val);
+	
+	            this.setConfig('theme', val);
 	        }
 	    }, {
 	        key: 'keyMapChange',
 	        value: function keyMapChange(e) {
 	            var index = e.target.selectedIndex;
 	            var val = e.target.options[index].value;
-	            this.setState(function (prevState) {
-	                prevState.config.keyMap = val;
-	                return {
-	                    config: prevState.config
-	                };
-	            });
-	            _editor2.default.setOption('keyMap', val);
+	
+	            this.setConfig('keyMap', val);
 	        }
 	    }, {
 	        key: 'render',
