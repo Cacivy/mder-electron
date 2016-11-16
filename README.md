@@ -11,9 +11,9 @@
 - [x] toggle menu
 - [x] paste as link/image
 - [x] export PDF/HTML
-- [] custom preview
-- [] open folder
-- [] print
+- [ ] custom preview
+- [ ] open folder
+- [ ] print
 
 ### Develop
 
