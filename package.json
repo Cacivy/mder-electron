@@ -41,12 +41,13 @@
     "webpack-dev-server": "^1.16.2"
   },
   "build": {
-    "productName": "mder",
+    "productName": "Mder",
     "win": {
-      "icon": "./app/static/M.ico"
+      "icon": "./app/static/Mder.ico"
     },
 		"mac": {
-      "category": "tool"
+      "category": "public.app-category.text-editor",
+      "icon": "./app/static/Mder.icns"
     }
   }
 }

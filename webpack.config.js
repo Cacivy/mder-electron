@@ -4,7 +4,7 @@ var openBrowserWebpackPlugin = require('open-browser-webpack-plugin');
 
 var APP_PATH = path.resolve(__dirname, './src/app.jsx');
 var MAIN_PATH = path.resolve(__dirname, './app/main.js');
-var BUILD_PATH = path.resolve(__dirname, './build');
+var BUILD_PATH = path.resolve(__dirname, './app');
 
 var config = {
     entry: {
@@ -36,7 +36,7 @@ var config = {
     // },
     devtool: 'source-map',
     devServer: {
-        contentBase: "./build",
+        contentBase: "./app",
         noInfo: true,
         hot: true,
         inline: true,

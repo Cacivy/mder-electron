@@ -23,25 +23,27 @@ var filePath
 
 function setFilePath(path) {
     filePath = path || ''
-    mainWindow.setTitle('mder' + (filePath && ('-' + filePath)))
+    mainWindow.setTitle(filePath)
+    // mainWindow.setTitle('mder' + (filePath && ('-' + filePath)))
 }
 
 function createWindow() {
     // window
     mainWindow = new BrowserWindow({
         width: 1000,
-        height: 600,
-        icon: './static/M.ico',
+        height: 600
     })
 
     if (debug) {
         mainWindow.loadURL('http://localhost:8080')
     } else {
-        mainWindow.loadURL(url.format({
-            pathname: path.join(__dirname, '../build/index.html'),
-            protocol: 'file:',
-            slashes: true
-        }))
+        // mainWindow.loadURL(url.format({
+        //     pathname: path.join(__dirname, '../build/index.html'),
+        //     protocol: 'file:',
+        //     slashes: true
+        // }))
+        console.log(__dirname)
+        mainWindow.loadURL('file://' + path.join(__dirname, '/index.html'))
     }
 
 
