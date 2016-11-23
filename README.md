@@ -20,21 +20,26 @@
 ### Develop
 
 ```
-// babel打包
+// 打包React
 npm run build
 
 // 启动electron app
 npm start
 
-// 单独打开web
-npm run server
-
-// 调试electron
-npm run dev
-
-// builder
+// 打包安装文件
 npm run dist
 ```
+
+```
+// 调试
+npm run server & npm run dev
+```
+
+### Download
+
+[mder-windows](http://mder.cacivy.com/mder%20Setup%201.0.0.exe)
+
+mac版请自行下载源码打包
 
 ### Thanks
 
