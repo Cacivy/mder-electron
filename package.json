@@ -7,7 +7,7 @@
     "start": "electron .",
     "dev": "electron . --debug",
     "server": "webpack-dev-server --inline --hot --progress --colors",
-    "build": "webpack &&  webpack --config webpack.app.config.js",
+    "build": "webpack",
     "pack": "build --dir",
     "dist": "build"
   },
@@ -19,9 +19,8 @@
   "license": "ISC",
   "dependencies": {
     "codemirror": "^5.19.0",
+    "highlight.js": "^9.8.0",
     "marked": "^0.3.6",
-    "prism": "^1.0.0",
-    "prismjs": "^1.5.1",
     "react": "^15.3.2",
     "react-dom": "^15.3.2",
     "react-modal": "^1.5.2"
@@ -35,6 +34,7 @@
     "electron": "^1.4.6",
     "electron-builder": "^8.5.3",
     "electron-prebuilt": "^1.4.6",
+    "extract-text-webpack-plugin": "^1.0.1",
     "open-browser-webpack-plugin": "0.0.3",
     "style-loader": "^0.13.1",
     "webpack": "^1.13.3",
@@ -45,7 +45,7 @@
     "win": {
       "icon": "./app/static/Mder.ico"
     },
-		"mac": {
+    "mac": {
       "category": "public.app-category.text-editor",
       "icon": "./app/static/Mder.icns"
     }

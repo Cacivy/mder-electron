@@ -1,8 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-import 'prismjs/themes/prism.css'
 import './preview.css'
+import '../static/preview/github.css'
 
 class Preview extends React.Component {
 	render() {

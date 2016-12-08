@@ -1,6 +1,7 @@
 var path = require('path');
 var webpack = require('webpack');
-var openBrowserWebpackPlugin = require('open-browser-webpack-plugin');
+var ExtractTextPlugin = require('extract-text-webpack-plugin')
+// var openBrowserWebpackPlugin = require('open-browser-webpack-plugin');
 
 var APP_PATH = path.resolve(__dirname, './src/app.jsx');
 var MAIN_PATH = path.resolve(__dirname, './app/main.js');
@@ -22,7 +23,7 @@ var config = {
         },
         {
             test: /\.css?$/,
-            loader: 'style-loader!css-loader'
+            loader: ExtractTextPlugin.extract('style-loader', 'css-loader')
         }]
     },
     target: "electron",
@@ -51,7 +52,8 @@ var config = {
     },
     plugins: [
         new webpack.HotModuleReplacementPlugin(),
-        new openBrowserWebpackPlugin({ url: 'http://localhost:8080' })
+        new ExtractTextPlugin("./style/[name].css", {allChunks: false})
+        // new openBrowserWebpackPlugin({ url: 'http://localhost:8080' })
     ],
     resolve: {
         extensions: ['', '.js', '.jsx'],

@@ -2,8 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 
 import marked from 'marked'
-import prism from 'prismjs'
-// import {ipcRenderer} from 'electron'
+import highlight from 'highlight.js'
 import CodeMirror from 'CodeMirror'
 import 'CodeMirror/addon/mode/overlay'
 import 'CodeMirror/addon/scroll/simplescrollbars'
@@ -16,7 +15,8 @@ import 'CodeMirror/mode/htmlmixed/htmlmixed.js'
 import 'CodeMirror/keymap/emacs.js'
 import 'CodeMirror/keymap/sublime.js'
 import 'CodeMirror/keymap/vim.js'
-import config from '../config/codemirror'
+import configCodemirror from '../config/codemirror'
+import configHighlight from '../config/highlight'
 import {ipcRenderer} from 'electron'
 import sample from '../config/sample'
 
@@ -33,10 +33,27 @@ import 'CodeMirror/theme/night.css'
 import 'CodeMirror/theme/rubyblue.css'
 import 'CodeMirror/theme/solarized.css'
 
+// highlight
+import codeStyleDefault from 'highlight.js/styles/default.css'
+
 var editor
 class Editor extends React.Component {
     constructor(props) {
         super(props)
+        marked.setOptions({
+            renderer: new marked.Renderer(),
+            gfm: true,
+            tables: true,
+            breaks: false,
+            pedantic: false,
+            sanitize: false,
+            smartLists: true,
+            smartypants: false,
+             highlight: function (code, lang) {
+                return highlight.highlightAuto(code).value
+            }
+        });
+
         this.componentDidMount = this.componentDidMount.bind(this)
         this.setValue = this.setValue.bind(this)
 
@@ -107,6 +124,14 @@ class Editor extends React.Component {
         }
     }
 
+    static setCodeStyle(style) {
+        var links = document.querySelectorAll('.codestyle');
+        Array.prototype.forEach.call(links, function(link) {
+            link.rel = 'stylesheet';
+            link.disabled = !link.href.match(style + '\\.css$');
+        });
+    }
+
     setValue(val) {
         editor.setValue(val || '')
         this.preview()
@@ -114,17 +139,12 @@ class Editor extends React.Component {
 
     preview() {
         document.getElementById('preview').innerHTML = marked(editor.getValue())
-        let doms = document.getElementById('preview').getElementsByTagName('pre')
-        for (let i = 0; i < doms.length; i++) {
-            let language = doms[i].getElementsByTagName('code')[0].className.split('-')[1] || 'javascript'
-            doms[i].className += 'language-' + language
-            doms[i].innerHTML = prism.highlight(doms[i].innerText, prism.languages[language] || prism.languages.javascript)
-        }
     }
 
     componentDidMount() {
-        editor = CodeMirror.fromTextArea(document.getElementById('text'), Object.assign({}, config))
+        editor = CodeMirror.fromTextArea(document.getElementById('text'), Object.assign({}, configCodemirror))
         this.setValue(sample)
+        Editor.setCodeStyle(configHighlight.theme)
         // keyup event
         editor.on('keyup', (cm, e) => {
             this.preview()

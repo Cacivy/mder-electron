@@ -9,6 +9,9 @@ coverage
 # production
 # build
 dist
+windows-store
+mder-appx
+mder-win32-x64
 
 # misc
 .DS_Store
