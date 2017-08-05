@@ -10,7 +10,8 @@ var config = localConfig ? JSON.parse(localConfig) :  {
     lineWrapping: true,
     scrollbarStyle: "simple", // overlay
     tabSize: 4,
-    keyMap: 'default'
+    keyMap: 'default',
+    preview: 'github'
 }
 
 export default config

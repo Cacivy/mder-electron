@@ -16,8 +16,9 @@ class Preference extends React.Component {
         super(props)
         this.state = {
             modalIsOpen: false,
-            config: config,
-            themes: themes
+            config,
+            themes,
+            preview: ['github', 'vue']
         }
 
         ipcRenderer.on('preference', (event, message) => {
@@ -32,6 +33,7 @@ class Preference extends React.Component {
         this.lineNumbersChange = this.lineNumbersChange.bind(this)
         this.lineWrappingChange = this.lineWrappingChange.bind(this)
         this.themeChange = this.themeChange.bind(this)
+        this.previewChange = this.previewChange.bind(this)
         this.keyMapChange = this.keyMapChange.bind(this)
     }
 
@@ -79,6 +81,13 @@ class Preference extends React.Component {
         this.setConfig('theme', val)
     }
 
+    previewChange(e) {
+        let index = e.target.selectedIndex
+        let val = e.target.options[index].value
+        this.props.onUpdatePreview(val)
+        this.setConfig('preview', val)
+    }
+
     keyMapChange(e) {
         let index = e.target.selectedIndex
         let val = e.target.options[index].value
@@ -115,7 +124,7 @@ class Preference extends React.Component {
                     contentLabel="Preference"
                     onRequestClose={this.closeModal}
                     >
-                    <h2 ref="subtitle">Editor</h2>
+                    <h2 ref="subtitle">Editor Preference</h2>
                     <form>
                         <div className="preference-item">
                             <div className="preference-key">Show lineNumbers</div>
@@ -142,11 +151,23 @@ class Preference extends React.Component {
                             </div>
                         </div>
                         <div className="preference-item">
-                            <div className="preference-key">Theme</div>
+                            <div className="preference-key">Editor Theme</div>
                             <div className="preference-value">
                                 <select value={this.state.config.theme} onChange={this.themeChange}>
                                 {
                                     this.state.themes.map(theme => 
+                                        <option key={theme} value={theme}>{theme}</option>
+                                    )
+                                }
+                                </select>
+                            </div>
+                        </div>
+                        <div className="preference-item">
+                            <div className="preference-key">Preview Theme</div>
+                            <div className="preference-value">
+                                <select value={this.state.config.preview} onChange={this.previewChange}>
+                                {
+                                    this.state.preview.map(theme => 
                                         <option key={theme} value={theme}>{theme}</option>
                                     )
                                 }
