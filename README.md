@@ -12,9 +12,11 @@
 - [x] paste as link/image
 - [x] export PDF/HTML
 - [x] localStorage
-- [ ] custom preview
+- [x] custom preview
 - [ ] open folder
 - [ ] print
+- [ ] add css
+- [ ] checkbox
 
 
 ### Develop

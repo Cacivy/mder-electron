@@ -1,4 +1,4 @@
-const github = `
+export const github = `
 #preview {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Microsoft Yahei", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
     font-size: 16px;
@@ -412,7 +412,7 @@ const github = `
     border-top: 0
 }
 `
-const vue = 
+export const vue = 
 `
 #preview *::selection {
     background: #42b983;
@@ -535,7 +535,3 @@ const vue =
     background-color: #f66;
     font-family: 'Dosis', 'Source Sans Pro', 'Helvetica Neue', Arial, sans-serif
 }`
-
-export {
-    github, vue
-}

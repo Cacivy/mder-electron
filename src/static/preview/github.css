@@ -186,7 +186,9 @@
 #preview table {
     display: block;
     width: 100%;
-    overflow: auto
+    overflow: auto;
+    border-spacing: 0;
+    border-collapse: collapse;
 }
 
 #preview table th {

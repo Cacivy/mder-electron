@@ -19,3 +19,8 @@
     border: 1px solid #bbb;
     border-radius: 2px;
 }
+
+#preview table {
+    border-spacing: 0;
+    border-collapse: collapse;
+}
