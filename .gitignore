@@ -16,4 +16,4 @@ mder-win32-x64
 # misc
 .DS_Store
 .env
-npm-debug.log
+npm-debug.log.*

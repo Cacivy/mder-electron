@@ -119,7 +119,7 @@
 .cm-s-default .cm-property,
 .cm-s-default .cm-operator {}
 .cm-s-default .cm-variable-2 {color: #05a;}
-.cm-s-default .cm-variable-3 {color: #085;}
+.cm-s-default .cm-variable-3, .cm-s-default .cm-type {color: #085;}
 .cm-s-default .cm-comment {color: #a50;}
 .cm-s-default .cm-string {color: #a11;}
 .cm-s-default .cm-string-2 {color: #f50;}
@@ -223,11 +223,8 @@ div.CodeMirror span.CodeMirror-nonmatchingbracket {color: #f22;}
   cursor: default;
   z-index: 4;
 }
-.CodeMirror-gutter-wrapper {
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  user-select: none;
-}
+.CodeMirror-gutter-wrapper ::selection { background-color: transparent }
+.CodeMirror-gutter-wrapper ::-moz-selection { background-color: transparent }
 
 .CodeMirror-lines {
   cursor: text;
@@ -249,8 +246,8 @@ div.CodeMirror span.CodeMirror-nonmatchingbracket {color: #f22;}
   position: relative;
   overflow: visible;
   -webkit-tap-highlight-color: transparent;
-  -webkit-font-variant-ligatures: none;
-  font-variant-ligatures: none;
+  -webkit-font-variant-ligatures: contextual;
+  font-variant-ligatures: contextual;
 }
 .CodeMirror-wrap pre {
   word-wrap: break-word;
@@ -271,6 +268,8 @@ div.CodeMirror span.CodeMirror-nonmatchingbracket {color: #f22;}
 }
 
 .CodeMirror-widget {}
+
+.CodeMirror-rtl pre { direction: rtl; }
 
 .CodeMirror-code {
   outline: none;
@@ -406,7 +405,7 @@ span.CodeMirror-selectedtext { background: none; }
   width: 100%;
 }
 .CodeMirror {
-    font-family: 'Dosis', 'Source Sans Pro', 'Helvetica Neue', Arial, sans-serif;
+    font-family: 'Microsoft Yahei', 'Dosis', 'Source Sans Pro', 'Helvetica Neue', Arial, sans-serif;
     font-size: 16px;
     height: 100% !important;
     background: #F9F9F5;
@@ -441,7 +440,7 @@ span.CodeMirror-selectedtext { background: none; }
 .cm-s-eclipse span.cm-def { color: #00f; }
 .cm-s-eclipse span.cm-variable { color: black; }
 .cm-s-eclipse span.cm-variable-2 { color: #0000C0; }
-.cm-s-eclipse span.cm-variable-3 { color: #0000C0; }
+.cm-s-eclipse span.cm-variable-3, .cm-s-eclipse span.cm-type { color: #0000C0; }
 .cm-s-eclipse span.cm-property { color: black; }
 .cm-s-eclipse span.cm-operator { color: black; }
 .cm-s-eclipse span.cm-comment { color: #3F7F5F; }
@@ -493,7 +492,7 @@ span.CodeMirror-selectedtext { background: none; }
 
 .cm-s-monokai span.cm-variable { color: #f8f8f2; }
 .cm-s-monokai span.cm-variable-2 { color: #9effff; }
-.cm-s-monokai span.cm-variable-3 { color: #66d9ef; }
+.cm-s-monokai span.cm-variable-3, .cm-s-monokai span.cm-type { color: #66d9ef; }
 .cm-s-monokai span.cm-def { color: #fd971f; }
 .cm-s-monokai span.cm-bracket { color: #f8f8f2; }
 .cm-s-monokai span.cm-tag { color: #f92672; }
@@ -515,7 +514,7 @@ span.CodeMirror-selectedtext { background: none; }
 
 */
 
-.cm-s-material {
+.cm-s-material.CodeMirror {
   background-color: #263238;
   color: rgba(233, 237, 237, 1);
 }
@@ -535,7 +534,7 @@ span.CodeMirror-selectedtext { background: none; }
 .cm-s-material .cm-keyword { color: rgba(199, 146, 234, 1); }
 .cm-s-material .cm-operator { color: rgba(233, 237, 237, 1); }
 .cm-s-material .cm-variable-2 { color: #80CBC4; }
-.cm-s-material .cm-variable-3 { color: #82B1FF; }
+.cm-s-material .cm-variable-3, .cm-s-material .cm-type { color: #82B1FF; }
 .cm-s-material .cm-builtin { color: #DECB6B; }
 .cm-s-material .cm-atom { color: #F77669; }
 .cm-s-material .cm-number { color: #F77669; }
@@ -549,7 +548,7 @@ span.CodeMirror-selectedtext { background: none; }
 .cm-s-material .cm-attribute { color: #FFCB6B; }
 .cm-s-material .cm-property { color: #80CBAE; }
 .cm-s-material .cm-qualifier { color: #DECB6B; }
-.cm-s-material .cm-variable-3 { color: #DECB6B; }
+.cm-s-material .cm-variable-3, .cm-s-material .cm-type { color: #DECB6B; }
 .cm-s-material .cm-tag { color: rgba(255, 83, 112, 1); }
 .cm-s-material .cm-error {
   color: rgba(255, 255, 255, 1.0);
@@ -578,7 +577,7 @@ span.CodeMirror-selectedtext { background: none; }
 .cm-s-night span.cm-string { color: #37f14a; }
 .cm-s-night span.cm-meta { color: #7678e2; }
 .cm-s-night span.cm-variable-2, .cm-s-night span.cm-tag { color: #99b2ff; }
-.cm-s-night span.cm-variable-3, .cm-s-night span.cm-def { color: white; }
+.cm-s-night span.cm-variable-3, .cm-s-night span.cm-def, .cm-s-night span.cm-type { color: white; }
 .cm-s-night span.cm-bracket { color: #8da6ce; }
 .cm-s-night span.cm-builtin, .cm-s-night span.cm-special { color: #ff9e59; }
 .cm-s-night span.cm-link { color: #845dc4; }
@@ -603,7 +602,7 @@ span.CodeMirror-selectedtext { background: none; }
 .cm-s-rubyblue span.cm-string { color: #F08047; }
 .cm-s-rubyblue span.cm-meta { color: #F0F; }
 .cm-s-rubyblue span.cm-variable-2, .cm-s-rubyblue span.cm-tag { color: #7BD827; }
-.cm-s-rubyblue span.cm-variable-3, .cm-s-rubyblue span.cm-def { color: white; }
+.cm-s-rubyblue span.cm-variable-3, .cm-s-rubyblue span.cm-def, .cm-s-rubyblue span.cm-type { color: white; }
 .cm-s-rubyblue span.cm-bracket { color: #F0F; }
 .cm-s-rubyblue span.cm-link { color: #F4C20B; }
 .cm-s-rubyblue span.CodeMirror-matchingbracket { color:#F0F !important; }
@@ -670,7 +669,7 @@ http://ethanschoonover.com/solarized/img/solarized-palette.png
 
 .cm-s-solarized .cm-variable { color: #839496; }
 .cm-s-solarized .cm-variable-2 { color: #b58900; }
-.cm-s-solarized .cm-variable-3 { color: #6c71c4; }
+.cm-s-solarized .cm-variable-3, .cm-s-solarized .cm-type { color: #6c71c4; }
 
 .cm-s-solarized .cm-property { color: #2aa198; }
 .cm-s-solarized .cm-operator { color: #6c71c4; }
@@ -902,7 +901,7 @@ Original highlight.js style (c) Ivan Sagalaev <maniac@softwaremaniacs.org>
 }
 
 #preview {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Microsoft Yahei", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
     font-size: 16px;
     line-height: 1.5;
     word-wrap: break-word
@@ -1342,7 +1341,7 @@ Original highlight.js style (c) Ivan Sagalaev <maniac@softwaremaniacs.org>
 body {
     margin: 0;
     width: 100%;
-    font-family: sans-serif;
+    font-family: "Microsoft Yahei", sans-serif;
     -ms-text-size-adjust: 100%;
     -webkit-text-size-adjust: 100%
 }

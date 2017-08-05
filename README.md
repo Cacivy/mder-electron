@@ -1,6 +1,6 @@
 # mder
 
-> A Awesome Markdown Editor!
+> A Simple Markdown Editor!
 
 ### Todo
 
@@ -37,7 +37,7 @@ npm run server & npm run dev
 
 ### Download
 
-[mder-windows](http://mder.cacivy.com/mder%20Setup%201.0.0.exe)
+[mder-windows](https://github.com/Cacivy/mder-electron/releases)
 
 mac版请自行下载源码打包
 
