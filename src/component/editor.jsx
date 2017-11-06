@@ -17,7 +17,7 @@ import 'CodeMirror/keymap/sublime.js'
 import 'CodeMirror/keymap/vim.js'
 import configCodemirror from '../config/codemirror'
 import configHighlight from '../config/highlight'
-import {ipcRenderer} from 'electron'
+import { ipcRenderer } from 'electron'
 import sample from '../config/sample'
 
 import 'CodeMirror/lib/codemirror.css'
@@ -40,8 +40,19 @@ var editor
 class Editor extends React.Component {
     constructor(props) {
         super(props)
+        var renderer = new marked.Renderer()
+        renderer.listitem = function(text) {
+            if (/^\s*\[[x ]\]\s*/.test(text)) {
+            text = text
+              .replace(/^\s*\[ \]\s*/, '<input type="checkbox" readonly></input> ')
+              .replace(/^\s*\[x\]\s*/, '<input type="checkbox" readonly checked></input>');
+                return '<li style="list-style: none;margin-left: -32px;">' + text + '</li>';
+              } else {
+                return '<li>' + text + '</li>';
+              }
+            };
         marked.setOptions({
-            renderer: new marked.Renderer(),
+            renderer,
             gfm: true,
             tables: true,
             list: true,
@@ -49,11 +60,13 @@ class Editor extends React.Component {
             pedantic: false,
             sanitize: false,
             smartLists: true,
-            smartypants: false,
+            smartypants: true,
             highlight: function (code, lang) {
                 return highlight.highlightAuto(code).value
             }
-        });
+        })
+
+        
 
         this.componentDidMount = this.componentDidMount.bind(this)
         this.setValue = this.setValue.bind(this)
@@ -74,7 +87,7 @@ class Editor extends React.Component {
                         // YES
                         ipcRenderer.send('save-dialog', val)
                         ipcRenderer.once('saved-file', (ev, filename) => {
-                            ipcRenderer.send('message-dialog', 'info', '提示', '保存成功('+filename+')', [])
+                            ipcRenderer.send('message-dialog', 'info', '提示', '保存成功(' + filename + ')', [])
                             this.setValue()
                         })
                     }
@@ -92,7 +105,7 @@ class Editor extends React.Component {
             if (val) {
                 ipcRenderer.send('save-dialog', val)
                 ipcRenderer.once('saved-file', (ev, filename) => {
-                    ipcRenderer.send('message-dialog', 'info', '提示', '保存成功('+filename+')', [])
+                    ipcRenderer.send('message-dialog', 'info', '提示', '保存成功(' + filename + ')', [])
                 })
             }
         })
@@ -107,19 +120,19 @@ class Editor extends React.Component {
 
         ipcRenderer.on('paste-as-link', (event, type, text) => {
             var content = ''
-            switch(type) {
+            switch (type) {
                 case 'link':
                     content = `[${editor.getSelection()}](${text})`
-                break;
+                    break;
                 case 'image':
                     content = `![${editor.getSelection()}](${text})`
-                break;
+                    break;
             }
             editor.replaceSelection(content, 'around')
         })
     }
 
-    static setOption (key, val) {
+    static setOption(key, val) {
         if (editor) {
             editor.setOption(key, val)
         }
@@ -127,7 +140,7 @@ class Editor extends React.Component {
 
     static setCodeStyle(style) {
         var links = document.querySelectorAll('.codestyle');
-        Array.prototype.forEach.call(links, function(link) {
+        Array.prototype.forEach.call(links, function (link) {
             link.rel = 'stylesheet';
             link.disabled = !link.href.match(style + '\\.css$');
         });

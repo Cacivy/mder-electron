@@ -1,6 +1,6 @@
 {
   "name": "electron-react",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "a awesome markdown editor",
   "main": "./app/main.js",
   "scripts": {
@@ -11,10 +11,7 @@
     "pack": "build --dir",
     "dist": "build"
   },
-  "keywords": [
-    "react",
-    "electron"
-  ],
+  "keywords": ["react", "electron"],
   "author": "Cacivy",
   "license": "ISC",
   "dependencies": {

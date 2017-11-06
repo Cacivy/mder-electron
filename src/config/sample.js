@@ -1,6 +1,5 @@
 export default 
-`---
-__Awesome Markdown Editor :)__
+`__Awesome Markdown Editor :)__
 
 ---
 
@@ -13,6 +12,9 @@ __Awesome Markdown Editor :)__
 
 
 ## Horizontal Rules
+
+- [ ] watch movie
+- [x]  homework
 
 ___
 

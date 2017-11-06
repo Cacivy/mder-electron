@@ -41,7 +41,7 @@
 /******/ 	}
 /******/ 	
 /******/ 	var hotApplyOnUpdate = true;
-/******/ 	var hotCurrentHash = "5d64a05ad009f47af6bf"; // eslint-disable-line no-unused-vars
+/******/ 	var hotCurrentHash = "9205153159ca9d7e3216"; // eslint-disable-line no-unused-vars
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentParents = []; // eslint-disable-line no-unused-vars
 /******/ 	
@@ -579,9 +579,13 @@
 	
 	var _preview2 = _interopRequireDefault(_preview);
 	
-	var _preference = __webpack_require__(412);
+	var _preference = __webpack_require__(410);
 	
 	var _preference2 = _interopRequireDefault(_preference);
+	
+	var _styles = __webpack_require__(429);
+	
+	var _styles2 = _interopRequireDefault(_styles);
 	
 	__webpack_require__(431);
 	
@@ -599,18 +603,30 @@
 		function App() {
 			_classCallCheck(this, App);
 	
-			return _possibleConstructorReturn(this, (App.__proto__ || Object.getPrototypeOf(App)).apply(this, arguments));
+			var _this = _possibleConstructorReturn(this, (App.__proto__ || Object.getPrototypeOf(App)).call(this));
+	
+			_this.state = {
+				previewTheme: 'github'
+			};
+			_this.onUpdatePreview = _this.onUpdatePreview.bind(_this);
+			return _this;
 		}
 	
 		_createClass(App, [{
+			key: 'onUpdatePreview',
+			value: function onUpdatePreview(val) {
+				this.setState({ previewTheme: val });
+			}
+		}, {
 			key: 'render',
 			value: function render() {
 				return _react2.default.createElement(
 					'div',
 					null,
 					_react2.default.createElement(_editor2.default, null),
-					_react2.default.createElement(_preview2.default, null),
-					_react2.default.createElement(_preference2.default, null)
+					_react2.default.createElement(_preview2.default, { theme: this.state.previewTheme }),
+					_react2.default.createElement(_preference2.default, { onUpdatePreview: this.onUpdatePreview }),
+					_react2.default.createElement(_styles2.default, { theme: this.state.previewTheme })
 				);
 			}
 		}]);
@@ -619,6 +635,12 @@
 	}(_react2.default.Component);
 	
 	_reactDom2.default.render(_react2.default.createElement(App, null), document.getElementById('container'));
+	
+	if (process.env.NODE_ENV === 'development') {
+		if (true) {
+			module.hot.accept();
+		}
+	}
 
 /***/ }),
 /* 1 */
@@ -22591,15 +22613,25 @@
 	
 	        var _this = _possibleConstructorReturn(this, (Editor.__proto__ || Object.getPrototypeOf(Editor)).call(this, props));
 	
+	        var renderer = new _marked2.default.Renderer();
+	        renderer.listitem = function (text) {
+	            if (/^\s*\[[x ]\]\s*/.test(text)) {
+	                text = text.replace(/^\s*\[ \]\s*/, '<input type="checkbox" readonly></input> ').replace(/^\s*\[x\]\s*/, '<input type="checkbox" readonly checked></input>');
+	                return '<li style="list-style: none;margin-left: -32px;">' + text + '</li>';
+	            } else {
+	                return '<li>' + text + '</li>';
+	            }
+	        };
 	        _marked2.default.setOptions({
-	            renderer: new _marked2.default.Renderer(),
+	            renderer: renderer,
 	            gfm: true,
 	            tables: true,
+	            list: true,
 	            breaks: false,
 	            pedantic: false,
 	            sanitize: false,
 	            smartLists: true,
-	            smartypants: false,
+	            smartypants: true,
 	            highlight: function highlight(code, lang) {
 	                return _highlight3.default.highlightAuto(code).value;
 	            }
@@ -61544,7 +61576,8 @@
 	    lineWrapping: true,
 	    scrollbarStyle: "simple", // overlay
 	    tabSize: 4,
-	    keyMap: 'default'
+	    keyMap: 'default',
+	    preview: 'github'
 	};
 	
 	exports.default = config;
@@ -61578,7 +61611,7 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	exports.default = "---\n__Awesome Markdown Editor :)__\n\n---\n\n# h1 Heading 8-)\n## h2 Heading\n### h3 Heading\n#### h4 Heading\n##### h5 Heading\n###### h6 Heading\n\n\n## Horizontal Rules\n\n___\n\n---\n\n***\n\n## Typographic replacements\n\nEnable typographer option to see result.\n\n(c) (C) (r) (R) (tm) (TM) (p) (P) +-\n\ntest.. test... test..... test?..... test!....\n\n!!!!!! ???? ,,  -- ---\n\n\"Smartypants, double quotes\" and 'single quotes'\n\n\n## Emphasis\n\n**This is bold text**\n\n__This is bold text__\n\n*This is italic text*\n\n_This is italic text_\n\n~~Strikethrough~~\n\n\n## Blockquotes\n\n\n> Blockquotes can also be nested...\n>> ...by using additional greater-than signs right next to each other...\n> > > ...or with spaces between arrows.\n\n\n## Lists\n\nUnordered\n\n+ Create a list by starting a line with `+`, `-`, or `*`\n+ Sub-lists are made by indenting 2 spaces:\n  - Marker character change forces new list start:\n    * Ac tristique libero volutpat at\n    + Facilisis in pretium nisl aliquet\n    - Nulla volutpat aliquam velit\n+ Very easy!\n\nOrdered\n\n1. Lorem ipsum dolor sit amet\n2. Consectetur adipiscing elit\n3. Integer molestie lorem at massa\n\n\n1. You can use sequential numbers...\n1. ...or keep all the numbers as `1.`\n\nStart numbering with offset:\n\n57. foo\n1. bar\n\n\n## Code\n\nInline `code`\n\nIndented code\n\n    // Some comments\n    line 1 of code\n    line 2 of code\n    line 3 of code\n\n\nBlock code \"fences\"\n\n```\nSample text here...\n```\n\nSyntax highlighting\n\n``` js\nvar foo = function (bar) {\n  return bar++;\n};\n\nconsole.log(foo(5));\n```\n\n## Tables\n\n| Option | Description |\n| ------ | ----------- |\n| data   | path to data files to supply the data that will be passed into templates. |\n| engine | engine to be used for processing templates. Handlebars is the default. |\n| ext    | extension to be used for dest files. |\n\nRight aligned columns\n\n| Option | Description |\n| ------:| -----------:|\n| data   | path to data files to supply the data that will be passed into templates. |\n| engine | engine to be used for processing templates. Handlebars is the default. |\n| ext    | extension to be used for dest files. |\n\n\n## Links\n\n[link text](http://dev.nodeca.com)\n\n[link with title](http://nodeca.github.io/pica/demo/ \"title text!\")\n\nAutoconverted link https://github.com/nodeca/pica (enable linkify to see)\n\n\n## Images\n\n![Minion](https://octodex.github.com/images/minion.png)\n![Stormtroopocat](https://octodex.github.com/images/stormtroopocat.jpg \"The Stormtroopocat\")\n\nLike links, Images also have a footnote style syntax\n\n![Alt text][id]\n\nWith a reference later in the document defining the URL location:\n\n[id]: https://octodex.github.com/images/dojocat.jpg  \"The Dojocat\"\n\n\n## Plugins\n\nThe killer feature of `markdown-it` is very effective support of\n[syntax plugins](https://www.npmjs.org/browse/keyword/markdown-it-plugin).\n\n\n### [Emojies](https://github.com/markdown-it/markdown-it-emoji)\n\n> Classic markup: :wink: :crush: :cry: :tear: :laughing: :yum:\n>\n> Shortcuts (emoticons): :-) :-( 8-) ;)\n\nsee [how to change output](https://github.com/markdown-it/markdown-it-emoji#change-output) with twemoji.\n\n\n### [Subscript](https://github.com/markdown-it/markdown-it-sub) / [Superscript](https://github.com/markdown-it/markdown-it-sup)\n\n- 19^th^\n- H~2~O\n\n\n### [<ins>](https://github.com/markdown-it/markdown-it-ins)\n\n++Inserted text++\n\n\n### [<mark>](https://github.com/markdown-it/markdown-it-mark)\n\n==Marked text==\n\n\n### [Footnotes](https://github.com/markdown-it/markdown-it-footnote)\n\nFootnote 1 link[^first].\n\nFootnote 2 link[^second].\n\nInline footnote^[Text of inline footnote] definition.\n\nDuplicated footnote reference[^second].\n\n[^first]: Footnote **can have markup**\n\n    and multiple paragraphs.\n\n[^second]: Footnote text.\n\n\n### [Definition lists](https://github.com/markdown-it/markdown-it-deflist)\n\nTerm 1\n\n:   Definition 1\nwith lazy continuation.\n\nTerm 2 with *inline markup*\n\n:   Definition 2\n\n        { some code, part of Definition 2 }\n\n    Third paragraph of definition 2.\n\n_Compact style:_\n\nTerm 1\n  ~ Definition 1\n\nTerm 2\n  ~ Definition 2a\n  ~ Definition 2b\n\n\n### [Abbreviations](https://github.com/markdown-it/markdown-it-abbr)\n\nThis is HTML abbreviation example.\n\nIt converts \"HTML\", but keep intact partial entries like \"xxxHTMLyyy\" and so on.\n\n*[HTML]: Hyper Text Markup Language\n\n### [Custom containers](https://github.com/markdown-it/markdown-it-container)\n\n::: warning\n*here be dragons*\n:::\n";
+	exports.default = "__Awesome Markdown Editor :)__\n\n---\n\n# h1 Heading 8-)\n## h2 Heading\n### h3 Heading\n#### h4 Heading\n##### h5 Heading\n###### h6 Heading\n\n\n## Horizontal Rules\n\n- [ ] watch movie\n- [x]  homework\n\n___\n\n---\n\n***\n\n## Typographic replacements\n\nEnable typographer option to see result.\n\n(c) (C) (r) (R) (tm) (TM) (p) (P) +-\n\ntest.. test... test..... test?..... test!....\n\n!!!!!! ???? ,,  -- ---\n\n\"Smartypants, double quotes\" and 'single quotes'\n\n\n## Emphasis\n\n**This is bold text**\n\n__This is bold text__\n\n*This is italic text*\n\n_This is italic text_\n\n~~Strikethrough~~\n\n\n## Blockquotes\n\n\n> Blockquotes can also be nested...\n>> ...by using additional greater-than signs right next to each other...\n> > > ...or with spaces between arrows.\n\n\n## Lists\n\nUnordered\n\n+ Create a list by starting a line with `+`, `-`, or `*`\n+ Sub-lists are made by indenting 2 spaces:\n  - Marker character change forces new list start:\n    * Ac tristique libero volutpat at\n    + Facilisis in pretium nisl aliquet\n    - Nulla volutpat aliquam velit\n+ Very easy!\n\nOrdered\n\n1. Lorem ipsum dolor sit amet\n2. Consectetur adipiscing elit\n3. Integer molestie lorem at massa\n\n\n1. You can use sequential numbers...\n1. ...or keep all the numbers as `1.`\n\nStart numbering with offset:\n\n57. foo\n1. bar\n\n\n## Code\n\nInline `code`\n\nIndented code\n\n    // Some comments\n    line 1 of code\n    line 2 of code\n    line 3 of code\n\n\nBlock code \"fences\"\n\n```\nSample text here...\n```\n\nSyntax highlighting\n\n``` js\nvar foo = function (bar) {\n  return bar++;\n};\n\nconsole.log(foo(5));\n```\n\n## Tables\n\n| Option | Description |\n| ------ | ----------- |\n| data   | path to data files to supply the data that will be passed into templates. |\n| engine | engine to be used for processing templates. Handlebars is the default. |\n| ext    | extension to be used for dest files. |\n\nRight aligned columns\n\n| Option | Description |\n| ------:| -----------:|\n| data   | path to data files to supply the data that will be passed into templates. |\n| engine | engine to be used for processing templates. Handlebars is the default. |\n| ext    | extension to be used for dest files. |\n\n\n## Links\n\n[link text](http://dev.nodeca.com)\n\n[link with title](http://nodeca.github.io/pica/demo/ \"title text!\")\n\nAutoconverted link https://github.com/nodeca/pica (enable linkify to see)\n\n\n## Images\n\n![Minion](https://octodex.github.com/images/minion.png)\n![Stormtroopocat](https://octodex.github.com/images/stormtroopocat.jpg \"The Stormtroopocat\")\n\nLike links, Images also have a footnote style syntax\n\n![Alt text][id]\n\nWith a reference later in the document defining the URL location:\n\n[id]: https://octodex.github.com/images/dojocat.jpg  \"The Dojocat\"\n\n\n## Plugins\n\nThe killer feature of `markdown-it` is very effective support of\n[syntax plugins](https://www.npmjs.org/browse/keyword/markdown-it-plugin).\n\n\n### [Emojies](https://github.com/markdown-it/markdown-it-emoji)\n\n> Classic markup: :wink: :crush: :cry: :tear: :laughing: :yum:\n>\n> Shortcuts (emoticons): :-) :-( 8-) ;)\n\nsee [how to change output](https://github.com/markdown-it/markdown-it-emoji#change-output) with twemoji.\n\n\n### [Subscript](https://github.com/markdown-it/markdown-it-sub) / [Superscript](https://github.com/markdown-it/markdown-it-sup)\n\n- 19^th^\n- H~2~O\n\n\n### [<ins>](https://github.com/markdown-it/markdown-it-ins)\n\n++Inserted text++\n\n\n### [<mark>](https://github.com/markdown-it/markdown-it-mark)\n\n==Marked text==\n\n\n### [Footnotes](https://github.com/markdown-it/markdown-it-footnote)\n\nFootnote 1 link[^first].\n\nFootnote 2 link[^second].\n\nInline footnote^[Text of inline footnote] definition.\n\nDuplicated footnote reference[^second].\n\n[^first]: Footnote **can have markup**\n\n    and multiple paragraphs.\n\n[^second]: Footnote text.\n\n\n### [Definition lists](https://github.com/markdown-it/markdown-it-deflist)\n\nTerm 1\n\n:   Definition 1\nwith lazy continuation.\n\nTerm 2 with *inline markup*\n\n:   Definition 2\n\n        { some code, part of Definition 2 }\n\n    Third paragraph of definition 2.\n\n_Compact style:_\n\nTerm 1\n  ~ Definition 1\n\nTerm 2\n  ~ Definition 2a\n  ~ Definition 2b\n\n\n### [Abbreviations](https://github.com/markdown-it/markdown-it-abbr)\n\nThis is HTML abbreviation example.\n\nIt converts \"HTML\", but keep intact partial entries like \"xxxHTMLyyy\" and so on.\n\n*[HTML]: Hyper Text Markup Language\n\n### [Custom containers](https://github.com/markdown-it/markdown-it-container)\n\n::: warning\n*here be dragons*\n:::\n";
 
 /***/ }),
 /* 383 */
@@ -61681,8 +61714,6 @@
 	
 	__webpack_require__(408);
 	
-	__webpack_require__(410);
-	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -61721,13 +61752,6 @@
 /***/ }),
 /* 409 */,
 /* 410 */
-/***/ (function(module, exports) {
-
-	// removed by extract-text-webpack-plugin
-
-/***/ }),
-/* 411 */,
-/* 412 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -61746,7 +61770,7 @@
 	
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 	
-	var _reactModal = __webpack_require__(413);
+	var _reactModal = __webpack_require__(411);
 	
 	var _reactModal2 = _interopRequireDefault(_reactModal);
 	
@@ -61758,13 +61782,13 @@
 	
 	var _codemirror2 = _interopRequireDefault(_codemirror);
 	
-	var _theme = __webpack_require__(428);
+	var _theme = __webpack_require__(426);
 	
 	var _theme2 = _interopRequireDefault(_theme);
 	
 	var _electron = __webpack_require__(381);
 	
-	__webpack_require__(429);
+	__webpack_require__(427);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -61787,7 +61811,8 @@
 	        _this.state = {
 	            modalIsOpen: false,
 	            config: _codemirror2.default,
-	            themes: _theme2.default
+	            themes: _theme2.default,
+	            preview: ['github', 'vue']
 	        };
 	
 	        _electron.ipcRenderer.on('preference', function (event, message) {
@@ -61802,6 +61827,7 @@
 	        _this.lineNumbersChange = _this.lineNumbersChange.bind(_this);
 	        _this.lineWrappingChange = _this.lineWrappingChange.bind(_this);
 	        _this.themeChange = _this.themeChange.bind(_this);
+	        _this.previewChange = _this.previewChange.bind(_this);
 	        _this.keyMapChange = _this.keyMapChange.bind(_this);
 	        return _this;
 	    }
@@ -61859,6 +61885,14 @@
 	            this.setConfig('theme', val);
 	        }
 	    }, {
+	        key: 'previewChange',
+	        value: function previewChange(e) {
+	            var index = e.target.selectedIndex;
+	            var val = e.target.options[index].value;
+	            this.props.onUpdatePreview(val);
+	            this.setConfig('preview', val);
+	        }
+	    }, {
 	        key: 'keyMapChange',
 	        value: function keyMapChange(e) {
 	            var index = e.target.selectedIndex;
@@ -61903,7 +61937,7 @@
 	                    _react2.default.createElement(
 	                        'h2',
 	                        { ref: 'subtitle' },
-	                        'Editor'
+	                        'Editor Preference'
 	                    ),
 	                    _react2.default.createElement(
 	                        'form',
@@ -61966,7 +62000,7 @@
 	                            _react2.default.createElement(
 	                                'div',
 	                                { className: 'preference-key' },
-	                                'Theme'
+	                                'Editor Theme'
 	                            ),
 	                            _react2.default.createElement(
 	                                'div',
@@ -61975,6 +62009,30 @@
 	                                    'select',
 	                                    { value: this.state.config.theme, onChange: this.themeChange },
 	                                    this.state.themes.map(function (theme) {
+	                                        return _react2.default.createElement(
+	                                            'option',
+	                                            { key: theme, value: theme },
+	                                            theme
+	                                        );
+	                                    })
+	                                )
+	                            )
+	                        ),
+	                        _react2.default.createElement(
+	                            'div',
+	                            { className: 'preference-item' },
+	                            _react2.default.createElement(
+	                                'div',
+	                                { className: 'preference-key' },
+	                                'Preview Theme'
+	                            ),
+	                            _react2.default.createElement(
+	                                'div',
+	                                { className: 'preference-value' },
+	                                _react2.default.createElement(
+	                                    'select',
+	                                    { value: this.state.config.preview, onChange: this.previewChange },
+	                                    this.state.preview.map(function (theme) {
 	                                        return _react2.default.createElement(
 	                                            'option',
 	                                            { key: theme, value: theme },
@@ -62029,29 +62087,29 @@
 	exports.default = Preference;
 
 /***/ }),
-/* 413 */
+/* 411 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(414);
+	module.exports = __webpack_require__(412);
 	
 
 
 /***/ }),
-/* 414 */
+/* 412 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
 	var ReactDOM = __webpack_require__(36);
-	var DOMFactories = __webpack_require__(415);
-	var PropTypes = __webpack_require__(416);
-	var ExecutionEnvironment = __webpack_require__(418);
-	var ModalPortal = React.createFactory(__webpack_require__(419));
-	var ariaAppHider = __webpack_require__(425);
-	var refCount = __webpack_require__(426);
-	var elementClass = __webpack_require__(427);
+	var DOMFactories = __webpack_require__(413);
+	var PropTypes = __webpack_require__(414);
+	var ExecutionEnvironment = __webpack_require__(416);
+	var ModalPortal = React.createFactory(__webpack_require__(417));
+	var ariaAppHider = __webpack_require__(423);
+	var refCount = __webpack_require__(424);
+	var elementClass = __webpack_require__(425);
 	var renderSubtreeIntoContainer = __webpack_require__(36).unstable_renderSubtreeIntoContainer;
-	var Assign = __webpack_require__(423);
-	var createReactClass = __webpack_require__(424);
+	var Assign = __webpack_require__(421);
+	var createReactClass = __webpack_require__(422);
 	
 	var SafeHTMLElement = ExecutionEnvironment.canUseDOM ? window.HTMLElement : {};
 	var AppElement = ExecutionEnvironment.canUseDOM ? document.body : {appendChild: function() {}};
@@ -62221,7 +62279,7 @@
 
 
 /***/ }),
-/* 415 */
+/* 413 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -62424,7 +62482,7 @@
 
 
 /***/ }),
-/* 416 */
+/* 414 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	/**
@@ -62455,12 +62513,12 @@
 	} else {
 	  // By explicitly using `prop-types` you are opting into new production behavior.
 	  // http://fb.me/prop-types-in-prod
-	  module.exports = __webpack_require__(417)();
+	  module.exports = __webpack_require__(415)();
 	}
 
 
 /***/ }),
-/* 417 */
+/* 415 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	/**
@@ -62525,7 +62583,7 @@
 
 
 /***/ }),
-/* 418 */
+/* 416 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -62570,15 +62628,15 @@
 
 
 /***/ }),
-/* 419 */
+/* 417 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
-	var DOMFactories = __webpack_require__(415);
-	var focusManager = __webpack_require__(420);
-	var scopeTab = __webpack_require__(422);
-	var Assign = __webpack_require__(423);
-	var createReactClass = __webpack_require__(424);
+	var DOMFactories = __webpack_require__(413);
+	var focusManager = __webpack_require__(418);
+	var scopeTab = __webpack_require__(420);
+	var Assign = __webpack_require__(421);
+	var createReactClass = __webpack_require__(422);
 	
 	var div = DOMFactories.div;
 	
@@ -62779,10 +62837,10 @@
 
 
 /***/ }),
-/* 420 */
+/* 418 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var findTabbable = __webpack_require__(421);
+	var findTabbable = __webpack_require__(419);
 	var focusLaterElements = [];
 	var modalElement = null;
 	var needToFocus = false;
@@ -62853,7 +62911,7 @@
 
 
 /***/ }),
-/* 421 */
+/* 419 */
 /***/ (function(module, exports) {
 
 	/*!
@@ -62909,10 +62967,10 @@
 
 
 /***/ }),
-/* 422 */
+/* 420 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var findTabbable = __webpack_require__(421);
+	var findTabbable = __webpack_require__(419);
 	
 	module.exports = function(node, event) {
 	  var tabbable = findTabbable(node);
@@ -62934,7 +62992,7 @@
 
 
 /***/ }),
-/* 423 */
+/* 421 */
 /***/ (function(module, exports) {
 
 	/**
@@ -63577,7 +63635,7 @@
 
 
 /***/ }),
-/* 424 */
+/* 422 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	/**
@@ -63613,7 +63671,7 @@
 
 
 /***/ }),
-/* 425 */
+/* 423 */
 /***/ (function(module, exports) {
 
 	var _element = typeof document !== 'undefined' ? document.body : null;
@@ -63661,7 +63719,7 @@
 
 
 /***/ }),
-/* 426 */
+/* 424 */
 /***/ (function(module, exports) {
 
 	var modals = [];
@@ -63686,7 +63744,7 @@
 
 
 /***/ }),
-/* 427 */
+/* 425 */
 /***/ (function(module, exports) {
 
 	module.exports = function(opts) {
@@ -63751,7 +63809,7 @@
 
 
 /***/ }),
-/* 428 */
+/* 426 */
 /***/ (function(module, exports) {
 
 	'use strict';
@@ -63762,13 +63820,89 @@
 	exports.default = ['default', 'eclipse', 'elegant', 'monokai', 'material', 'night', 'rubyblue', 'solarized'];
 
 /***/ }),
-/* 429 */
+/* 427 */
 /***/ (function(module, exports) {
 
 	// removed by extract-text-webpack-plugin
 
 /***/ }),
-/* 430 */,
+/* 428 */,
+/* 429 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _react = __webpack_require__(1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _reactDom = __webpack_require__(36);
+	
+	var _reactDom2 = _interopRequireDefault(_reactDom);
+	
+	var _preview = __webpack_require__(430);
+	
+	var themes = _interopRequireWildcard(_preview);
+	
+	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var Styles = function (_React$Component) {
+	    _inherits(Styles, _React$Component);
+	
+	    function Styles() {
+	        _classCallCheck(this, Styles);
+	
+	        return _possibleConstructorReturn(this, (Styles.__proto__ || Object.getPrototypeOf(Styles)).apply(this, arguments));
+	    }
+	
+	    _createClass(Styles, [{
+	        key: 'render',
+	        value: function render() {
+	            var theme = themes[this.props.theme];
+	            return _react2.default.createElement(
+	                'div',
+	                { id: 'styles' },
+	                _react2.default.createElement(
+	                    'style',
+	                    null,
+	                    theme
+	                )
+	            );
+	        }
+	    }]);
+	
+	    return Styles;
+	}(_react2.default.Component);
+	
+	exports.default = Styles;
+
+/***/ }),
+/* 430 */
+/***/ (function(module, exports) {
+
+	"use strict";
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	var github = exports.github = "\n#preview {\n    font-family: -apple-system, BlinkMacSystemFont, \"Segoe UI\", \"Microsoft Yahei\", Helvetica, Arial, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\";\n    font-size: 16px;\n    line-height: 1.5;\n    word-wrap: break-word\n}\n\n#preview::before {\n    display: table;\n    content: \"\"\n}\n\n#preview::after {\n    display: table;\n    clear: both;\n    content: \"\"\n}\n\n#preview>*:first-child {\n    margin-top: 0 !important\n}\n\n#preview>*:last-child {\n    margin-bottom: 0 !important\n}\n\n#preview a:not([href]) {\n    color: inherit;\n    text-decoration: none\n}\n\n#preview .absent {\n    color: #c00\n}\n\n#preview .anchor {\n    float: left;\n    padding-right: 4px;\n    margin-left: -20px;\n    line-height: 1\n}\n\n#preview .anchor:focus {\n    outline: none\n}\n\n#preview p,#preview blockquote,#preview ul,#preview ol,#preview dl,#preview table,#preview pre {\n    margin-top: 0;\n    margin-bottom: 16px\n}\n\n#preview hr {\n    height: 0.25em;\n    padding: 0;\n    margin: 24px 0;\n    background-color: #e7e7e7;\n    border: 0\n}\n\n#preview blockquote {\n    padding: 0 1em;\n    color: #777;\n    border-left: 0.25em solid #ddd\n}\n\n#preview blockquote>:first-child {\n    margin-top: 0\n}\n\n#preview blockquote>:last-child {\n    margin-bottom: 0\n}\n\n#preview kbd {\n    display: inline-block;\n    padding: 3px 5px;\n    font-size: 11px;\n    line-height: 10px;\n    color: #555;\n    vertical-align: middle;\n    background-color: #fcfcfc;\n    border: solid 1px #ccc;\n    border-bottom-color: #bbb;\n    border-radius: 3px;\n    box-shadow: inset 0 -1px 0 #bbb\n}\n\n#preview .loweralpha {\n    list-style-type: lower-alpha\n}\n\n#preview h1,#preview h2,#preview h3,#preview h4,#preview h5,#preview h6 {\n    margin-top: 24px;\n    margin-bottom: 16px;\n    font-weight: 600;\n    line-height: 1.25\n}\n\n#preview h1 .octicon-link,#preview h2 .octicon-link,#preview h3 .octicon-link,#preview h4 .octicon-link,#preview h5 .octicon-link,#preview h6 .octicon-link {\n    color: #000;\n    vertical-align: middle;\n    visibility: hidden\n}\n\n#preview h1:hover .anchor,#preview h2:hover .anchor,#preview h3:hover .anchor,#preview h4:hover .anchor,#preview h5:hover .anchor,#preview h6:hover .anchor {\n    text-decoration: none\n}\n\n#preview h1:hover .anchor .octicon-link,#preview h2:hover .anchor .octicon-link,#preview h3:hover .anchor .octicon-link,#preview h4:hover .anchor .octicon-link,#preview h5:hover .anchor .octicon-link,#preview h6:hover .anchor .octicon-link {\n    visibility: visible\n}\n\n#preview h1 tt,#preview h1 code,#preview h2 tt,#preview h2 code,#preview h3 tt,#preview h3 code,#preview h4 tt,#preview h4 code,#preview h5 tt,#preview h5 code,#preview h6 tt,#preview h6 code {\n    font-size: inherit\n}\n\n#preview h1 {\n    padding-bottom: 0.3em;\n    font-size: 2em;\n    border-bottom: 1px solid #eee\n}\n\n#preview h2 {\n    padding-bottom: 0.3em;\n    font-size: 1.5em;\n    border-bottom: 1px solid #eee\n}\n\n#preview h3 {\n    font-size: 1.25em\n}\n\n#preview h4 {\n    font-size: 1em\n}\n\n#preview h5 {\n    font-size: 0.875em\n}\n\n#preview h6 {\n    font-size: 0.85em;\n    color: #777\n}\n\n#preview ul,#preview ol {\n    padding-left: 2em\n}\n\n#preview ul.no-list,#preview ol.no-list {\n    padding: 0;\n    list-style-type: none\n}\n\n#preview ul ul,#preview ul ol,#preview ol ol,#preview ol ul {\n    margin-top: 0;\n    margin-bottom: 0\n}\n\n#preview li>p {\n    margin-top: 16px\n}\n\n#preview li+li {\n    margin-top: 0.25em\n}\n\n#preview dl {\n    padding: 0\n}\n\n#preview dl dt {\n    padding: 0;\n    margin-top: 16px;\n    font-size: 1em;\n    font-style: italic;\n    font-weight: bold\n}\n\n#preview dl dd {\n    padding: 0 16px;\n    margin-bottom: 16px\n}\n\n#preview table {\n    display: block;\n    width: 100%;\n    overflow: auto\n}\n\n#preview table th {\n    font-weight: bold\n}\n\n#preview table th,#preview table td {\n    padding: 6px 13px;\n    border: 1px solid #ddd\n}\n\n#preview table tr {\n    background-color: #fff;\n    border-top: 1px solid #ccc\n}\n\n#preview table tr:nth-child(2n) {\n    background-color: #f8f8f8\n}\n\n#preview img {\n    max-width: 100%;\n    box-sizing: content-box;\n    background-color: #fff\n}\n\n#preview img[align=right] {\n    padding-left: 20px\n}\n\n#preview img[align=left] {\n    padding-right: 20px\n}\n\n#preview .emoji {\n    max-width: none;\n    vertical-align: text-top;\n    background-color: transparent\n}\n\n#preview span.frame {\n    display: block;\n    overflow: hidden\n}\n\n#preview span.frame>span {\n    display: block;\n    float: left;\n    width: auto;\n    padding: 7px;\n    margin: 13px 0 0;\n    overflow: hidden;\n    border: 1px solid #ddd\n}\n\n#preview span.frame span img {\n    display: block;\n    float: left\n}\n\n#preview span.frame span span {\n    display: block;\n    padding: 5px 0 0;\n    clear: both;\n    color: #333\n}\n\n#preview span.align-center {\n    display: block;\n    overflow: hidden;\n    clear: both\n}\n\n#preview span.align-center>span {\n    display: block;\n    margin: 13px auto 0;\n    overflow: hidden;\n    text-align: center\n}\n\n#preview span.align-center span img {\n    margin: 0 auto;\n    text-align: center\n}\n\n#preview span.align-right {\n    display: block;\n    overflow: hidden;\n    clear: both\n}\n\n#preview span.align-right>span {\n    display: block;\n    margin: 13px 0 0;\n    overflow: hidden;\n    text-align: right\n}\n\n#preview span.align-right span img {\n    margin: 0;\n    text-align: right\n}\n\n#preview span.float-left {\n    display: block;\n    float: left;\n    margin-right: 13px;\n    overflow: hidden\n}\n\n#preview span.float-left span {\n    margin: 13px 0 0\n}\n\n#preview span.float-right {\n    display: block;\n    float: right;\n    margin-left: 13px;\n    overflow: hidden\n}\n\n#preview span.float-right>span {\n    display: block;\n    margin: 13px auto 0;\n    overflow: hidden;\n    text-align: right\n}\n\n#preview code,#preview tt {\n    padding: 0;\n    padding-top: 0.2em;\n    padding-bottom: 0.2em;\n    margin: 0;\n    font-size: 85%;\n    background-color: rgba(0,0,0,0.04);\n    border-radius: 3px\n}\n\n#preview code::before,#preview code::after,#preview tt::before,#preview tt::after {\n    letter-spacing: -0.2em;\n    content: \"\0a0\"\n}\n\n#preview code br,#preview tt br {\n    display: none\n}\n\n#preview del code {\n    text-decoration: inherit\n}\n\n#preview pre {\n    word-wrap: normal\n}\n\n#preview pre>code {\n    padding: 0;\n    margin: 0;\n    font-size: 100%;\n    word-break: normal;\n    white-space: pre;\n    background: transparent;\n    border: 0\n}\n\n#preview .highlight {\n    margin-bottom: 16px\n}\n\n#preview .highlight pre {\n    margin-bottom: 0;\n    word-break: normal\n}\n\n#preview .highlight pre,#preview pre {\n    padding: 16px;\n    overflow: auto;\n    font-size: 85%;\n    line-height: 1.45;\n    background-color: #f7f7f7;\n    border-radius: 3px\n}\n\n#preview pre code,#preview pre tt {\n    display: inline;\n    max-width: auto;\n    padding: 0;\n    margin: 0;\n    overflow: visible;\n    line-height: inherit;\n    word-wrap: normal;\n    background-color: transparent;\n    border: 0\n}\n\n#preview pre code::before,#preview pre code::after,#preview pre tt::before,#preview pre tt::after {\n    content: normal\n}\n\n#preview .csv-data td,#preview .csv-data th {\n    padding: 5px;\n    overflow: hidden;\n    font-size: 12px;\n    line-height: 1;\n    text-align: left;\n    white-space: nowrap\n}\n\n#preview .csv-data .blob-num {\n    padding: 10px 8px 9px;\n    text-align: right;\n    background: #fff;\n    border: 0\n}\n\n#preview .csv-data tr {\n    border-top: 0\n}\n\n#preview .csv-data th {\n    font-weight: bold;\n    background: #f8f8f8;\n    border-top: 0\n}\n";
+	var vue = exports.vue = "\n#preview *::selection {\n    background: #42b983;\n    color: #ffffff;\n}\n\n\n#preview table {\n    display: block;\n    width: 100%;\n    overflow: auto;\n    word-break: normal;\n    word-break: keep-all;\n}\n\n#preview table tr th {\n    font-weight: bold;\n    padding: 6px 13px;\n    border: 1px solid #ddd;\n}\n\n#preview table tr td {\n    padding: 6px 13px;\n    border: 1px solid #ddd;\n}\n\n#preview img {\n    max-width: 100%;\n}\n\n#preview h2,\n#preview h3,\n#preview h4,\n#preview h5,\n#preview h6 {\n    position: relative;\n    margin: 1em 1em\n}\n\n#preview h2:before,\n#preview h3:before,\n#preview h4:before,\n#preview h5:before,\n#preview h6:before {\n    content: \"#\";\n    color: #42b983;\n    position: absolute;\n    left: -0.8em;\n    top: -4px;\n    font-size: 1.2em;\n    font-weight: bold\n}\n\n#preview h4:before,\n#preview h5:before,\n#preview h6:before {\n    content: \"\"\n}\n\n#preview h2,\n#preview h3 {\n    font-size: 22px\n}\n\n#preview h4,\n#preview h5,\n#preview h6 {\n    font-size: 18px\n}\n\n#preview a {\n    color: #42b983;\n    word-break: break-all\n}\n\n#preview blockquote {\n    margin: 2em 0;\n    padding-left: 20px;\n    border-left: 4px solid #42b983\n}\n\n#preview img {\n    display: block;\n    max-width: 100%;\n    margin: 1em auto\n}\n\n#preview>table,\n#preview>figure.highlight {\n    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.125)\n}\n\n#preview .tip {\n    position: relative;\n    margin: 2em 0;\n    padding: 12px 24px 12px 30px;\n    border-left: 4px solid #f66;\n    border-top-right-radius: 2px;\n    border-bottom-right-radius: 2px;\n    background-color: #f8f8f8\n}\n\n#preview .tip br {\n    display: none\n}\n\n#preview .tip:before {\n    position: absolute;\n    top: 14px;\n    left: -12px;\n    content: \"!\";\n    width: 20px;\n    height: 20px;\n    border-radius: 100%;\n    color: #fff;\n    font-size: 14px;\n    line-height: 20px;\n    font-weight: bold;\n    text-align: center;\n    background-color: #f66;\n    font-family: 'Dosis', 'Source Sans Pro', 'Helvetica Neue', Arial, sans-serif\n}";
+
+/***/ }),
 /* 431 */
 /***/ (function(module, exports) {
 

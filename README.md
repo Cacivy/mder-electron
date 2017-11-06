@@ -22,14 +22,15 @@
 ### Develop
 
 ```
-// 打包React
-npm run build
+// dev
+npm run dev
+npm run server
 
-// 启动electron app
+// build
+npm run build
+npm run dist
 npm start
 
-// 打包安装文件
-npm run dist
 ```
 
 ```
